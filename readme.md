@@ -38,8 +38,10 @@ MAX_WORD_LENGTH - defines the maximum length of the word the user can enter.
 ![alt text](image.png)
 
 
-```bash
-gcc .\test\test.c .\src\game.c .\src\word_utils.c
+```shell
+cd test
+gcc gcc .\test.c ..\src\game.c ..\src\word_utils.c
+.\a.exe
 ```
 
 ## Play Game

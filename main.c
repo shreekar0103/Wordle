@@ -40,7 +40,7 @@ int main() {
         printf("Hoorayy!!!! YOU WON !!\n");
     } else {
         printf("OOPS!!! Better Luck Next Time\n");
-        printf("CORRECT WORD: %s\n", gs->target_word);
+        printf("CORRECT WORD: %s\n", gs->target_word.letter);
     }
 
     return 0;

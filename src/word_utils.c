@@ -59,7 +59,7 @@ int load_words_from_file(WordList *word_list){
     char ch;
 
 
-    fptr = fopen("wordlist.txt", "r");
+    fptr = fopen("D:/shreekar files/cProgramming/wordle_project_1/wordlist.txt", "r");
     if( NULL == fptr){
         printf("file cant be open ");
         return EXIT_FAILURE;

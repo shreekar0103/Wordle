@@ -55,9 +55,8 @@ void evaluate_guess(GameState *game_state){
             for (int j = 0; j < MAX_WORD_LENGTH; j++) {
                 if (used_letters[j])
                     continue;
-                LetterStatus isCorrect = game_state->guess_status[game_state->current_attempt][j];
             
-                if (latest_word.letter[i] == game_state->target_word.letter[j] && isCorrect != CORRECT) {
+                if (latest_word.letter[i] == game_state->target_word.letter[j]) {
                     game_state->guess_status[game_state->current_attempt][i] = PRESENT;
                     used_letters[j] = true;
                 }
@@ -75,12 +74,8 @@ bool make_guess(GameState *game_state, Word *word){
     }
 
     // check if maximum attempts are exceeded
-    if (game_state->current_attempt > MAX_ATTEMPTS) {
+    if (game_state->current_attempt+1 == MAX_ATTEMPTS) {
         game_state->game_over = true;
-        game_state->game_win = false;
-
-        return game_state->game_win;
-
     }
 
     // store the word inside game_state->guesses

@@ -1,4 +1,8 @@
-#include <word_utils.h>
+#ifndef GAME_H  
+#define GAME_H
+#include "word_utils.h"
+
+#define MAX_ATTEMPTS 6
 typedef enum { INCORRECT, PRESENT, CORRECT} LetterStatus ;
 
 typedef struct 
@@ -16,4 +20,4 @@ void initialize_game(GameState *game_state, WordList *word_list);
 bool make_guess(GameState *game_state, Word *word);
 void evaluate_guess(GameState *game_state);
 
-
+#endif

@@ -2,15 +2,24 @@
 
 ## File Structure
 ```
-/include
-    - game.h
-    - word_utils.h
-/src
-    - game.c
-    - word_utils.c
-/test
-    - test.c
-- main.c
+D:.
+|   a.exe
+|   image.png
+|   main.c
+|   README.md
+|   wordlist.txt
+|
++---include
+|       game.h
+|       word_utils.h
+|
++---src
+|       game.c
+|       word_utils.c
+|
+\---test
+        a.exe
+        test.c
 
 ```
 

@@ -65,14 +65,17 @@ int main() {
     
     strcpy(gs->target_word.letter, random_word.letter);
 
-    Word guess_list[4] = {
+    Word guess_list[MAX_ATTEMPTS] = {
         {'s', 'h', 'a', 'v', 'e', '\0'},
         {'a', 'h', 'a', 'v', 'e', '\0'},
         {'s', 'k', 'a', 'v', 'e', '\0'},
-        {'s', 'h', 'a', 'v', 'e', '\0'}
+        {'s', 'h', 'a', 'v', 'e', '\0'},
+        {'s', 'h', 'a', 'v', 'e', '\0'},
+        {'b', 'h', 'a', 'v', 'e', '\0'}
     };
 
     strcpy(guess_list[3].letter, random_word.letter);
+
 
     int attempt = 0 ;
     
@@ -93,6 +96,8 @@ int main() {
         printf("\n");
 
         if (f) break;
+
+        gs->current_attempt++;
     }
 
     printf("test 4: PLAY GAME - ");

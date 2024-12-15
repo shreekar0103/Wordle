@@ -36,6 +36,7 @@ MAX_WORD_LENGTH - defines the maximum length of the word the user can enter.
 
 ## Testing
 ```
+![alt text](image.png)
 ```
 
 ```bash

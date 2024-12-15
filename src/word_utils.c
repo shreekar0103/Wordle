@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 //.. means the file goes back 
 
@@ -121,7 +122,7 @@ use rand() function and select a random word from wordlist
 */
 
 Word select_random_word(WordList *word_list){
-    // srand(time(NULL));
+    srand(time(NULL));
     int r = rand() % MAX_WORDS;
     Word random_word = word_list->Words[r]; 
 

@@ -3,6 +3,19 @@
 #include <stdlib.h>
 #include "../include/game.h"
 
+#define COLOR_GREEN "\e[1;32m"
+#define COLOR_RED "\e[1;31m"
+#define COLOR_OFF "\033[0m"
+#define TEST_PASS "test PASSED (\xfb)\n"
+#define TEST_FAIL "test FAILED (x)\n"
+
+void print_test_result(bool cond){
+    if (cond) {
+        printf(COLOR_GREEN TEST_PASS COLOR_OFF); 
+    } else {
+        printf(COLOR_RED TEST_FAIL COLOR_OFF);
+    } 
+}
 
 int main() {
 
@@ -27,9 +40,8 @@ int main() {
 
     int is_same = strcmp(lastWordLetters, testWordLetters);
 
-    if (is_same == 0){
-        printf("test 1: WORDS LOADED - test PASSED ✅\n");
-    } else printf("test 1: WORDS LOADED - test Failed ❌\n");
+    printf("test 1: WORDS LOADED - ");
+    print_test_result(is_same == 0);
 
     // is_valid_word  test
 
@@ -38,16 +50,15 @@ int main() {
 
     strcpy(test_word->letter, testWordLetters);
 
-    if (is_valid_word(test_word,wl)) {
-        printf("test 2: VALID WORD - test PASSED ✅\n");
-    } else printf("test 2: VALID WORD - test Failed ❌\n");
+
+    printf("test 2: VALID WORD - ");
+    print_test_result(is_valid_word(test_word,wl));
 
     Word random_word = select_random_word(wl);
 
-    if(is_valid_word(&random_word, wl)) {
-        printf("test 3: RANDOM WORD - test PASSED ✅\n");
-    } else printf("test 3: RANDOM WORD - test Failed ❌\n");
-
+    printf("test 3: RANDOM WORD -");
+    print_test_result(is_valid_word(&random_word, wl));
+    
     GameState *gs;
     gs = (GameState* ) malloc(sizeof(GameState));
     initialize_game(gs,wl);
@@ -84,9 +95,8 @@ int main() {
         if (f) break;
     }
 
-    if (gs->game_win) {
-        printf("test 4: PLAY GAME - test PASSED ✅\n");
-    } else printf("test 4: PLAY GAME - test Failed ❌\n");
+    printf("test 4: PLAY GAME - ");
+    print_test_result(gs->game_win);
 
     return 0;
 }

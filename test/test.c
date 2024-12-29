@@ -28,7 +28,7 @@ int main() {
 
     intialize_word_list(wl);
     load_words_from_file(wl);
-
+  // it is present in word utils.h header file 
     // print_wordlist(wl);
 
     // test if all words are loaded
@@ -58,8 +58,7 @@ int main() {
 
     printf("test 3: RANDOM WORD -");
     print_test_result(is_valid_word(&random_word, wl));
-    
-    GameState *gs;
+         GameState *gs;
     gs = (GameState* ) malloc(sizeof(GameState));
     initialize_game(gs,wl);
     

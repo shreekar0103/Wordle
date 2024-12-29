@@ -12,7 +12,7 @@ POINTERS
 
 type *variable_name;
 
-what do they store ? 
+what do they store ?  
     - address
 
 int *p = NULL;
@@ -66,7 +66,7 @@ int load_words_from_file(WordList *word_list){
     }
 
     int wi = 0 ; 
-    while ((ch = fgetc (fptr))!=EOF){
+    while ((ch = fgetc (fptr))!=EOF ){
         words_array[wi++] = ch;
     }
 

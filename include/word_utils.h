@@ -24,3 +24,4 @@ int load_words_from_file(WordList *word_list);
 void print_wordlist(WordList *word_list);
 
 #endif
+    

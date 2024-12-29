@@ -70,7 +70,7 @@ void evaluate_guess(GameState *game_state){
 bool make_guess(GameState *game_state, Word *word){
     // check if game is already over
     if (game_state->game_over){
-        return game_state->game_win;
+        return false;
     }
 
     // check if maximum attempts are exceeded
@@ -92,11 +92,11 @@ bool make_guess(GameState *game_state, Word *word){
 
     for (int state=0 ; state < MAX_WORD_LENGTH; state++) {
         if (last_attempt_state[state] != CORRECT) {
-            return false;
+            return true;
         }
     }
     game_state->game_win = true;
     game_state->game_over = true;
 
-    return game_state->game_win;
+    return true;
 }

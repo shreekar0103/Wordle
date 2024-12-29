@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "include/game.h"
+#include "src/gui.c"
 
 
-int main() {
+int main (int argc, char **argv) {
 
     WordList *wl;
     // Dynamic memory allocation
@@ -18,10 +18,35 @@ int main() {
     // print_wordlist(wl);
 
     Word user_input; 
+    printf("Welcome to Wordle!!\n");
+    printf("In this game you have to guess a 5 letters word that should match to our targeted word\n");
+    printf("in this game The number of a letter will change to show you how close your guess was.\n");
+    printf("If the letter turns to number 2, the letter is in the word, and it is in the correct spot.\n");
+    printf("If the letter turns to number 1, the letter is in the word, but it is not in the correct spot.\n");
+    printf("If the letter turns to number 0, the letter is not in the word.\n");
+    printf("Let's Start The Game !!!!!!\n");
 
     GameState *gs =  (GameState*) malloc(sizeof(GameState));
     initialize_game(gs, wl);
 
+    // Generate UI
+    GtkApplication *app;
+    int status;
+
+
+    // create game UI 
+
+    app = gtk_application_new ("org.gtk.example", G_APPLICATION_DEFAULT_FLAGS);
+    GameUI* ui = NULL; 
+    ui = create_game_gui(app, wl, gs);
+
+    printf("KARTHIK %d", !ui);
+
+    g_signal_connect (app, "activate", G_CALLBACK (activate), ui);
+    status = g_application_run (G_APPLICATION (app), argc, argv);
+    g_object_unref (app);
+
+    return 0;
     while (!gs->game_over) {
         
         gets(user_input.letter);

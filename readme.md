@@ -7,8 +7,11 @@
 | Status    | Color  |
 | -------- | ------- |
 | INCORRECT  | Grey    |
+| COORECT    | GREEN |
+| PRESENT    | YELLOW |
 
--
+- If the player is failed to guess the Answer in six attempts then the answer will be revealed at the end of the six attempt.
+- The player should enter a meaningful 5 letters word.
 
 ## Design
 ### Classes and Objects
@@ -138,5 +141,4 @@ gcc main.c ./src/game.c ./src/word_utils.c  -o .\a.exe -DLIBDEFLATE_DLL -IC:/msy
 ### Issues Faced 
 
 ##### Header File multiple includes
-
-##### File Reading and Parsing
+- We faced multiple header files issues while working on this project. At the time of linking one file to another we found multiple headerfile classhes due to connection of one file to another. 

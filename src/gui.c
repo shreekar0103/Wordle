@@ -45,7 +45,7 @@ static void create_login_gui(GtkApplication* app, gpointer user_data) {
 
     
     GameUI* game_gui = (GameUI*) user_data;
-
+    game_gui->login_ui = (LoginUI*)malloc(sizeof(LoginUI));
     LoginUI* gui = game_gui->login_ui;
     
     gui->window = gtk_application_window_new (app);

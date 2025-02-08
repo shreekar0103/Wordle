@@ -41,9 +41,34 @@ void status_label_style(GtkWidget* label, int rgb[]) {
     g_free(css);
 }
 
-static void activate(GtkApplication* app, gpointer user_data) {
+static void create_login_gui(GtkApplication* app, gpointer user_data) {
 
-    GameUI* gui = (GameUI*) user_data;
+    
+    GameUI* game_gui = (GameUI*) user_data;
+
+    LoginUI* gui = game_gui->login_ui;
+    
+    gui->window = gtk_application_window_new (app);
+    gtk_window_set_title (GTK_WINDOW (gui->window), "Login Wordle");
+    gtk_window_set_default_size (GTK_WINDOW (gui->window), 200, 200);
+    gtk_window_present (GTK_WINDOW (gui->window));
+    
+    gui->box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_container_add (GTK_CONTAINER(gui->window), gui->box);
+
+
+    gui->login_button = gtk_button_new_with_label("Login");
+    gtk_box_pack_end(GTK_BOX (gui->box), gui->login_button, 0, 0, 0);
+    
+    g_signal_connect(gui->login_button, "clicked", G_CALLBACK(on_login_clicked), game_gui);
+
+    gtk_widget_show_all(gui->window);
+    
+
+}
+
+static void create_wordle_window(GtkApplication* app, gpointer data) {
+    GameUI* gui = (GameUI*) data;
     //gtk_window_set_application(GTK_WINDOW(gui->window), app);
     gui->window = gtk_application_window_new (app);
     gtk_window_set_title (GTK_WINDOW (gui->window), "W-O-R-D-L-E");
@@ -84,6 +109,19 @@ static void activate(GtkApplication* app, gpointer user_data) {
 
 
    gtk_widget_show_all(gui->window);
+}
+
+void on_login_clicked(GtkWidget* login_button, gpointer data) {
+    GameUI* game_gui = (GameUI*) data;
+
+    gtk_widget_destroy(GTK_WIDGET(game_gui->login_ui->window));
+
+    create_wordle_window(game_gui->app, game_gui);
+}
+
+
+static void activate(GtkApplication* app, gpointer user_data) {
+    create_login_gui(app, user_data);
 }
 
 void on_submit(GtkWidget* button, gpointer data) {
@@ -196,6 +234,7 @@ GameUI* create_game_gui(GtkApplication* app, WordList* word_list, GameState* gam
     gui = (GameUI *) malloc(sizeof(GameUI));
     gui->word_list = word_list;
     gui->game_state = game_state;
+    gui->app = app;
 
     return gui;
     

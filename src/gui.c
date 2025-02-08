@@ -62,9 +62,17 @@ static void create_login_gui(GtkApplication* app, gpointer user_data) {
     
     g_signal_connect(gui->login_button, "clicked", G_CALLBACK(on_login_clicked), game_gui);
 
-    gtk_widget_show_all(gui->window);
-    
+    gui->login_entry = gtk_entry_new();
+    gtk_entry_set_max_length(GTK_ENTRY(gui->login_entry), 3);
+    gtk_box_pack_start(GTK_BOX (gui->box), gui->login_entry, 0, 0, 0); 
 
+    gui->password_entry = gtk_entry_new();
+    gtk_entry_set_max_length(GTK_ENTRY(gui->password_entry), 3);
+    gtk_box_pack_start(GTK_BOX (gui->box), gui->password_entry, 0, 0, 0); 
+    gtk_box_pack_end(GTK_BOX (gui->box), gui->login_entry, 0, 0, 0); 
+
+    
+    gtk_widget_show_all(gui->window);
 }
 
 static void create_wordle_window(GtkApplication* app, gpointer data) {
@@ -113,10 +121,17 @@ static void create_wordle_window(GtkApplication* app, gpointer data) {
 
 void on_login_clicked(GtkWidget* login_button, gpointer data) {
     GameUI* game_gui = (GameUI*) data;
+    const gchar* username = gtk_entry_get_text(GTK_ENTRY(game_gui->login_ui->login_entry));
 
-    gtk_widget_destroy(GTK_WIDGET(game_gui->login_ui->window));
+    const gchar* password = gtk_entry_get_text(GTK_ENTRY(game_gui->login_ui->password_entry));
 
-    create_wordle_window(game_gui->app, game_gui);
+    if (strcmp(username, "abc") == 0 && strcmp(password, "aaa") == 0) {
+        gtk_widget_destroy(GTK_WIDGET(game_gui->login_ui->window));
+        create_wordle_window(game_gui->app, game_gui);
+    } else {
+        //dialogue box
+
+    }
 }
 
 

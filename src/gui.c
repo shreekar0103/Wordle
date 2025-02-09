@@ -62,16 +62,20 @@ static void create_login_gui(GtkApplication* app, gpointer user_data) {
     
     g_signal_connect(gui->login_button, "clicked", G_CALLBACK(on_login_clicked), game_gui);
 
+    gui->login_label = gtk_label_new("LOGIN ID");
+    gtk_box_pack_start(GTK_BOX(gui->box), gui->login_label, 0, 0, 0);
+
     gui->login_entry = gtk_entry_new();
     gtk_entry_set_max_length(GTK_ENTRY(gui->login_entry), 3);
     gtk_box_pack_start(GTK_BOX (gui->box), gui->login_entry, 0, 0, 0); 
 
+    gui->password_label = gtk_label_new("PASSWORD");
+    gtk_box_pack_start(GTK_BOX(gui->box), gui->password_label, 0, 0, 0);
+
     gui->password_entry = gtk_entry_new();
     gtk_entry_set_max_length(GTK_ENTRY(gui->password_entry), 3);
-    gtk_box_pack_start(GTK_BOX (gui->box), gui->password_entry, 0, 0, 0); 
-    gtk_box_pack_end(GTK_BOX (gui->box), gui->login_entry, 0, 0, 0); 
+    gtk_box_pack_start(GTK_BOX (gui->box), gui->password_entry, 0, 0, 0);     
 
-    
     gtk_widget_show_all(gui->window);
 }
 
@@ -103,6 +107,8 @@ static void create_wordle_window(GtkApplication* app, gpointer data) {
     gtk_grid_set_row_homogeneous(GTK_GRID(gui->grid), TRUE);
     gtk_box_pack_start(GTK_BOX (gui->box), gui->grid, FALSE, FALSE, 0);
 
+
+
     gui->input_entry = gtk_entry_new();
     gtk_entry_set_max_length(GTK_ENTRY(gui->input_entry), MAX_WORD_LENGTH);
     gtk_box_pack_start(GTK_BOX (gui->box), gui->input_entry, 0, 0, 0); 
@@ -130,7 +136,12 @@ void on_login_clicked(GtkWidget* login_button, gpointer data) {
         create_wordle_window(game_gui->app, game_gui);
     } else {
         //dialogue box
-
+        GtkWidget *dialog ;
+        GtkDialogFlags flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
+        dialog = gtk_dialog_new_with_buttons("Invalid Credentials",GTK_WINDOW(game_gui->login_ui->window),  flags , "_OK",
+                                       GTK_RESPONSE_ACCEPT,NULL);
+        gtk_dialog_run (GTK_DIALOG (dialog));
+        gtk_widget_destroy (dialog);
     }
 }
 

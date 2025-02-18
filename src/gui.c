@@ -125,11 +125,70 @@ static void create_wordle_window(GtkApplication* app, gpointer data) {
    gtk_widget_show_all(gui->window);
 }
 
+
+bool validate_user(char *username, char *password, char str[]) {
+    // open file user_data in read mode 
+    FILE *file_csv ;
+    char file_username[20];
+    char file_password[20];
+    int  file_streak;
+    int file_last_login;
+    file_csv = fopen ("D:/shreekar files/cProgramming/wordle_project_1/user_data.csv", "r");
+    char line[200];
+    while (fgets(line, sizeof(line), file_csv)){
+        char *token ;
+        token = strtok(line, ",");
+        int temp_id;
+        if(token!=NULL){
+            temp_id = conversion(str , *token);
+            token = strtok(NULL, ",");
+        }
+        if(token!=NULL){
+            char file_username[20] = token;
+            token = strtok(NULL, ",");
+        }
+        if(token!=NULL){
+            char file_password[20] = token;
+            token = strtok(NULL, ",");
+        }
+        if(token!=NULL){
+            file_streak = conversion(str, *token);
+            token = strtok(NULL, ",");
+        }
+        if(token!=NULL){
+            file_last_login = conversion(str, *token);
+            token = strtok(NULL, ",");
+        }
+
+
+    }
+    
+    // read line by line and extract user name and password streak and last login into separate variables 
+
+    // check if username and password mathches 
+
+    // if matches copy the data into loginui user data and return true 
+
+    // else return false 
+}
+int conversion (char str[], char *token){
+    strcpy(str, token);
+    int num = 0;
+    int n = strlen(str);
+    for(int i = 0; i<n ; i++){
+        num = num * 10 + (str[i]-48);
+    }
+    return num;
+}
+
+
 void on_login_clicked(GtkWidget* login_button, gpointer data) {
     GameUI* game_gui = (GameUI*) data;
     const gchar* username = gtk_entry_get_text(GTK_ENTRY(game_gui->login_ui->login_entry));
 
     const gchar* password = gtk_entry_get_text(GTK_ENTRY(game_gui->login_ui->password_entry));
+
+    // search for username and paassword in user_data 
 
     if (strcmp(username, "abc") == 0 && strcmp(password, "aaa") == 0) {
         gtk_widget_destroy(GTK_WIDGET(game_gui->login_ui->window));
@@ -175,6 +234,15 @@ void on_submit(GtkWidget* button, gpointer data) {
                 gtk_label_set_text(GTK_LABEL(gui->status_label), buf);
 
             }
+            // update streak and last login of user 
+
+            // if user last login is more than a day before update streak to 1.
+
+            // else increase current streak and last login to current time 
+
+            // open the user data file in write modde and search user with user id and update streak and last login.
+
+            // search for id and apply changes.
         }
         
 

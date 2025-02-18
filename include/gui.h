@@ -2,14 +2,19 @@
 #define GUI_H
 #include <gtk/gtk.h>
 #include "game.h"
+#include <time.h>
 
 typedef struct {
     GtkWidget *window, *login_button, *login_entry, *password_entry, *login_label, *password_label, *status_label, *box;
     char* username, password;
+    int streak, id ;
+    time_t last_login;
+
 } LoginUI;
 
 static void create_login_gui(GtkApplication* app, gpointer user_data);
 void on_login_clicked(GtkWidget* login_button, gpointer data);
+bool validate_user(char *username, char *password);
 
 typedef struct 
 {

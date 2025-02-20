@@ -1,11 +1,13 @@
 #include "../include/gui.h"
 #include <ctype.h>
+#include <stdio.h>
 GdkRGBA color_incorrect = {0.5, 0.5, 0.5, 1.0}; // Gray
 GdkRGBA color_present = {0.9, 0.9, 0.0, 1.0};   // Yellow
 GdkRGBA color_correct = {0.0, 0.8, 0.0, 1.0};  // Green
 GdkRGBA color_no_entry = {1.0, 1.0, 1.0, 1.0};
 
 int default_color[3]  = {250, 249, 209};
+int custom_color[3] = {249, 215, 119};
 int successs_color[3]  = {164, 255, 119};
 
 void status_label_style(GtkWidget* label, int rgb[]) {
@@ -75,8 +77,20 @@ static void create_login_gui(GtkApplication* app, gpointer user_data) {
     gui->password_entry = gtk_entry_new();
     gtk_entry_set_max_length(GTK_ENTRY(gui->password_entry), 3);
     gtk_box_pack_start(GTK_BOX (gui->box), gui->password_entry, 0, 0, 0);     
+    gtk_entry_set_visibility(GTK_ENTRY(gui->password_entry), FALSE);
 
     gtk_widget_show_all(gui->window);
+}
+
+void formatString(char *buffer, const char *format, ...) {
+   va_list args;
+   va_start(args, format);
+   vsprintf(buffer, format, args);
+   va_end(args);
+}
+
+void convert_to_local_time(time_t t, char *buff){
+    strftime(buff, 20, "%Y-%m-%d %H:%M:%S", localtime(&t));
 }
 
 static void create_wordle_window(GtkApplication* app, gpointer data) {
@@ -100,6 +114,14 @@ static void create_wordle_window(GtkApplication* app, gpointer data) {
     g_free (markup);
     status_label_style(gui->status_label, default_color);
     gtk_box_pack_start(GTK_BOX (gui->box), gui->status_label, 0, 0, 0);
+
+    char details[50], local_date[20] ;
+    convert_to_local_time(gui->login_ui->last_login, local_date);
+    formatString(details, "Welcome %s\nstreak : %d \t LL : %s",gui->login_ui->username, gui->login_ui->streak, local_date);
+    gui->details_label = gtk_label_new(details);
+    status_label_style(gui->details_label, custom_color);
+
+    gtk_box_pack_start(GTK_BOX (gui->box), gui->details_label, 0, 0, 0);
 
     gui->grid = gtk_grid_new();
     gtk_grid_set_column_spacing(GTK_GRID(gui->grid), 3);
@@ -125,43 +147,67 @@ static void create_wordle_window(GtkApplication* app, gpointer data) {
    gtk_widget_show_all(gui->window);
 }
 
+long int conversion_to_int (char *token){
+    long int num = 0;
+    int n = strlen(token);
+    for(int i = 0; i<n-1 ; i++){
+        num = num * 10 + (token[i] - '0');
+    }
+    return num;
+}
 
-bool validate_user(char *username, char *password, char str[]) {
+
+bool validate_user(GameUI* game_gui) {
     // open file user_data in read mode 
     FILE *file_csv ;
-    char file_username[20];
-    char file_password[20];
+    char file_username[MAX_USERNAME_LEN]; 
+    char file_password[MAX_USERPASS_LEN];
     int  file_streak;
-    int file_last_login;
+    int  file_id;
+    time_t file_last_login;
     file_csv = fopen ("D:/shreekar files/cProgramming/wordle_project_1/user_data.csv", "r");
     char line[200];
+    bool is_header = true;
     while (fgets(line, sizeof(line), file_csv)){
+        if (is_header){
+            is_header = false;  //next lines are not headers 
+            continue;
+        }
         char *token ;
         token = strtok(line, ",");
-        int temp_id;
         if(token!=NULL){
-            temp_id = conversion(str , *token);
+            file_id = conversion_to_int(token);
             token = strtok(NULL, ",");
         }
         if(token!=NULL){
-            char file_username[20] = token;
+            strcpy(file_username,token);
             token = strtok(NULL, ",");
         }
         if(token!=NULL){
-            char file_password[20] = token;
+            strcpy(file_password,token);
             token = strtok(NULL, ",");
         }
         if(token!=NULL){
-            file_streak = conversion(str, *token);
+            file_streak = conversion_to_int(token);
             token = strtok(NULL, ",");
         }
         if(token!=NULL){
-            file_last_login = conversion(str, *token);
+            file_last_login = (time_t) conversion_to_int (token);
             token = strtok(NULL, ",");
         }
-
-
+        
+    const gchar* username = gtk_entry_get_text(GTK_ENTRY(game_gui->login_ui->login_entry));
+    const gchar* password = gtk_entry_get_text(GTK_ENTRY(game_gui->login_ui->password_entry));
+    printf("%s %s %d %ld\n",file_username,file_password, file_streak, file_last_login);
+    
+    if(strcmp(username , file_username) == 0 && strcmp(password,file_password) == 0){
+        game_gui->login_ui->streak = file_streak;
+        game_gui->login_ui->last_login = file_last_login;
+        strcpy(game_gui->login_ui->username,file_username);
+        return true;
     }
+    }
+    return false;
     
     // read line by line and extract user name and password streak and last login into separate variables 
 
@@ -171,26 +217,13 @@ bool validate_user(char *username, char *password, char str[]) {
 
     // else return false 
 }
-int conversion (char str[], char *token){
-    strcpy(str, token);
-    int num = 0;
-    int n = strlen(str);
-    for(int i = 0; i<n ; i++){
-        num = num * 10 + (str[i]-48);
-    }
-    return num;
-}
 
 
 void on_login_clicked(GtkWidget* login_button, gpointer data) {
     GameUI* game_gui = (GameUI*) data;
-    const gchar* username = gtk_entry_get_text(GTK_ENTRY(game_gui->login_ui->login_entry));
-
-    const gchar* password = gtk_entry_get_text(GTK_ENTRY(game_gui->login_ui->password_entry));
-
     // search for username and paassword in user_data 
 
-    if (strcmp(username, "abc") == 0 && strcmp(password, "aaa") == 0) {
+    if (validate_user(game_gui)) { 
         gtk_widget_destroy(GTK_WIDGET(game_gui->login_ui->window));
         create_wordle_window(game_gui->app, game_gui);
     } else {
@@ -239,7 +272,7 @@ void on_submit(GtkWidget* button, gpointer data) {
             // if user last login is more than a day before update streak to 1.
 
             // else increase current streak and last login to current time 
-
+            gui->login_ui->last_login = time(NULL);
             // open the user data file in write modde and search user with user id and update streak and last login.
 
             // search for id and apply changes.
@@ -329,6 +362,7 @@ GameUI* create_game_gui(GtkApplication* app, WordList* word_list, GameState* gam
     gui->word_list = word_list;
     gui->game_state = game_state;
     gui->app = app;
+    gui->login_ui = (LoginUI*) malloc(sizeof(LoginUI));
 
     return gui;
     

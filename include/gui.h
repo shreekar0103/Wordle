@@ -4,9 +4,13 @@
 #include "game.h"
 #include <time.h>
 
+#define MAX_USERNAME_LEN  6
+#define MAX_USERPASS_LEN  6
+
+struct GameUI;
 typedef struct {
     GtkWidget *window, *login_button, *login_entry, *password_entry, *login_label, *password_label, *status_label, *box;
-    char* username, password;
+    char username[MAX_USERNAME_LEN], password[MAX_USERPASS_LEN];
     int streak, id ;
     time_t last_login;
 
@@ -14,13 +18,11 @@ typedef struct {
 
 static void create_login_gui(GtkApplication* app, gpointer user_data);
 void on_login_clicked(GtkWidget* login_button, gpointer data);
-bool validate_user(char *username, char *password);
-
 typedef struct 
 {
     WordList* word_list;
     GameState* game_state;
-    GtkWidget *window, *button, *input_entry, *grid, *box, *status_label ;
+    GtkWidget *window, *button, *input_entry, *grid, *box, *status_label, *details_label ;
     LoginUI* login_ui;
     GtkApplication* app;
 
@@ -31,4 +33,6 @@ static void create_wordle_gui(GtkApplication* app, gpointer data);
 void update_grid_ui(GameUI* gui);
 static void activate(GtkApplication* app, gpointer user_data);
 void on_submit(GtkWidget* button, gpointer data);
+bool validate_user(GameUI *game_gui);
+
 #endif

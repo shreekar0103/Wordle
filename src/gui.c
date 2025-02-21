@@ -280,11 +280,17 @@ void on_submit(GtkWidget* button, gpointer data) {
                 gui->login_ui->streak ++ ;
                 printf("%d",gui->login_ui->streak);
             }
-            
+        gui->login_ui->last_login = time(NULL);
+
+    char details[50];
+    convert_to_local_time(gui->login_ui->last_login, local_date);
+    formatString(details, "Welcome %s\nstreak : %d \t LL : %s",gui->login_ui->username, gui->login_ui->streak, local_date);
+    gtk_label_set_text(GTK_LABEL(gui->details_label), details);
+
             // if user last login is more than a day before update streak to 1.
 
             // else increase current streak and last login to current time 
-            //gui->login_ui->last_login = time(NULL);
+            
             // open the user data file in write modde and search user with user id and update streak and last login.
 
             // search for id and apply changes.
